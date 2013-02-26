@@ -29,10 +29,11 @@
         <div class="app">
         	<div id="startpage">
 				<a id="start" onclick="app.switchPage('map')">Speel spel</a>
-            	<div id="deviceready" class="blink">
-	                <p class="event listening"><a onclick="app.onMenuButton()">Controleren status...</a></p>
-                	<p class="event received"><a onclick="app.onMenuButton()">Apparaat is gereed</a></p>
+            	<a onclick="app.onMenuButton()"><div id="deviceready" class="blink">
+	                <p class="event listening">Controleren status...</p>
+                	<p class="event received">Apparaat is gereed</p>
             	</div>
+            	</a>
             </div>
             <div id="map" class="hidden">
             	<div id="map_canvas"></div>
