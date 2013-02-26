@@ -28,7 +28,9 @@ var app = {
 	playerid: window.localStorage.getItem("setting_playerid"),
 	settings: false,
 	agentsLayer: null,
+	agentsInterval: null,
 	thiefsLayer: null,
+	thiefsInterval: null,
 
     // Application Constructor
     initialize: function() {
@@ -61,7 +63,7 @@ var app = {
         listeningElement.setAttribute('style', 'display:none;');
         receivedElement.setAttribute('style', 'display:block;');
 
-        console.log('Received Event: ' + id);
+        console.log('Received Event: deviceready');
     },
     
     // Handling of events
@@ -99,6 +101,9 @@ var app = {
 		if(app.menuVisible) {
 			document.getElementById('menu').setAttribute('style', 'display:none');
 			app.menuVisible = false;
+		}
+		if(page == 'map') {
+			app.loadMap();
 		}
 	},
 	
@@ -138,7 +143,7 @@ var app = {
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
 		app.map = new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
-		setInterval("app.createAgentsLayer()",app.agentsRefreshInterval); // Agent layer
+		if(app.agentsInterval == null) app.agentsInterval = setInterval("app.createAgentsLayer()",app.agentsRefreshInterval); // Agent layer
 	},
 	
 	createThiefsLayer: function() {
@@ -209,7 +214,8 @@ var app = {
 					visibletime: response.rows[0][2],
 					rowid: 		 response.rows[0][3],
 			};
-			setInterval("app.createThiefsLayer()", app.settings.interval * 1000 + app.settings.visibletime * 1000); // Thief layer
+			if(app.thiefsInterval != null) clearInterval(app.thiefsInterval);
+			app.thiefsInterval = setInterval("app.createThiefsLayer()", app.settings.interval * 1000 + app.settings.visibletime * 1000); // Thief layer
 			writePlayerSettingsFile();
 		} else {
 			alert("Er is een niet bestaand user id opgegeven.");
